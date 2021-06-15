@@ -15,6 +15,11 @@ using std::string;
 #define END { glfwTerminate(); return 0; }
 #define END_ERR { glfwTerminate(); return -1; }
 
+#define ASSERT(x) if (!(x)) __debugbreak()
+#define GLCALL(x) GLClearError(); x; ASSERT(GLLogCall(__FILE__, #x, __LINE__))
+// #x will turn x into a string (const char*) e.g. x = glDraw, #x = "glDraw"
+
+
 typedef unsigned char byte;
 
 struct ShaderSources
@@ -73,6 +78,24 @@ struct Triangle
     }
 };
 
+// erro handling with glGetError() (legacy way)
+static void GLClearError()
+{
+    while (glGetError() != GL_NO_ERROR);
+}
+static bool GLLogCall(const char* file, const char* func, int line)
+{
+    while (GLenum err = glGetError())
+    {
+        std::cout << "[OpenGL Error] (code)<" << err << ">\n    @ \""
+            << file << "\" > " << func
+            << ",\n    @ line " << line << ":\n"
+            << err /*get error in word form*/ << std::endl;
+        return false;
+    }
+    return true;
+}
+
 
 void draw_legacy_triangle(float x, float y, float b, float h, GLbyte R=127, GLbyte G=127, GLbyte B=127)
 {
@@ -103,27 +126,27 @@ void draw_legacy_square(float x, float y, float s, GLbyte R=127, GLbyte G=127, G
 
 static unsigned int CompileShader(unsigned int type, const string& _src)
 {
-    unsigned int shader_id = glCreateShader(type);
+    GLCALL(unsigned int shader_id = glCreateShader(type));
     const char* src = _src.c_str();
-    glShaderSource(shader_id, 1, &src, nullptr);
-    glCompileShader(shader_id);
+    GLCALL(glShaderSource(shader_id, 1, &src, nullptr));
+    GLCALL(glCompileShader(shader_id));
 
     // ERROR HANDLING
     int result;                                           // to store the possible error code
-    glGetShaderiv(shader_id, GL_COMPILE_STATUS, &result); // returns 0 if there is an error while COMPILING shader source
+    GLCALL(glGetShaderiv(shader_id, GL_COMPILE_STATUS, &result)); // returns 0 if there is an error while COMPILING shader source
 
     if (result == GL_FALSE)
     {
         int len;
-        glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &len);                                    // length of error message
+        GLCALL(glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &len));                            // length of error message
         char* msg = (char*)_malloca(len * sizeof(char));                                       // allocate mem for eror message
-        glGetShaderInfoLog(shader_id, len, &len, msg);
+        GLCALL(glGetShaderInfoLog(shader_id, len, &len, msg));
 
         std::cout << "Error compiling shader type <";
         std::cout << ( type == GL_VERTEX_SHADER ? "GL_VERTEX_SHADER" : "GL_FRAGMENT_SHADER" ); // put shader type in string form using ternary operator
         std::cout << ">:\n" << msg << std::endl;                                               // print error message
 
-        glDeleteShader(shader_id);
+        GLCALL(glDeleteShader(shader_id));
         return 0;
     }
 
@@ -133,23 +156,23 @@ static unsigned int CompileShader(unsigned int type, const string& _src)
 static unsigned int CreateShader(const string& vertex_shader, const string& fragment_shader)
 {
     // create shaders
-    unsigned int prgrm = glCreateProgram();
+    GLCALL(unsigned int prgrm = glCreateProgram());
     unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertex_shader);
     unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragment_shader);
 
     // combine shaders
-    glAttachShader(prgrm, vs);
-    glAttachShader(prgrm, fs);
-    glLinkProgram(prgrm);
-    glValidateProgram(prgrm);
+    GLCALL(glAttachShader(prgrm, vs));
+    GLCALL(glAttachShader(prgrm, fs));
+    GLCALL(glLinkProgram(prgrm));
+    GLCALL(glValidateProgram(prgrm));
 
     // delete shaders
 #   if NDEBUG
-        glDetachShader(prgrm, vs); // remove for debugging
-        glDetachShader(prgrm, fs); // remove for debugging
+        GLCALL(glDetachShader(prgrm, vs)); // remove for debugging
+        GLCALL(glDetachShader(prgrm, fs)); // remove for debugging
 #   endif
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+    GLCALL(glDeleteShader(vs));
+    GLCALL(glDeleteShader(fs));
 
     return prgrm;
 }
@@ -233,7 +256,7 @@ int main(void)
         return -1;
 
     // Create a windowed mode window and its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(640, 480, "OpenGL", NULL, NULL);
     if (!window)
         END_ERR
 
@@ -264,12 +287,12 @@ int main(void)
     };
 
     unsigned int buf;
-    glGenBuffers(1, &buf);
-    glBindBuffer(GL_ARRAY_BUFFER, buf);
-    glBufferData(GL_ARRAY_BUFFER, 4*2 * sizeof(float), pos, GL_STATIC_DRAW); // the positions are static. use GL_DYNAMIC_DRAW for positions that can change
+    GLCALL(glGenBuffers(1, &buf));
+    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, buf));
+    GLCALL(glBufferData(GL_ARRAY_BUFFER, 4*2 * sizeof(float), pos, GL_STATIC_DRAW)); // the positions are static. use GL_DYNAMIC_DRAW for positions that can change
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, nullptr);
+    GLCALL(glEnableVertexAttribArray(0));
+    GLCALL(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, nullptr));
 
     // using INDEX BUFFERS
     unsigned int indeces[6] = {
@@ -278,15 +301,15 @@ int main(void)
     };           // 2 triangles to make a square
     // bind the index buffer to GPU
     unsigned int index_buf_obj;
-    glGenBuffers(1, &index_buf_obj);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buf_obj);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indeces, GL_STATIC_DRAW);
+    GLCALL(glGenBuffers(1, &index_buf_obj));
+    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buf_obj));
+    GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indeces, GL_STATIC_DRAW));
 
     // get shader from txt file
     ShaderSources src = parse_shader_file("res/shaders/basic.shader");
 
     unsigned int shader = CreateShader(src.vert, src.frag);
-    glUseProgram(shader);
+    GLCALL(glUseProgram(shader));
     // -- 
 
 
@@ -301,9 +324,12 @@ int main(void)
         //draw_legacy_triangle(-1, 1, 1, 1);
         //t.draw();
         // glDrawArrays(GL_TRIANGLES, 0, 6); // draw triangle with static buffer
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr); // draw square with index buffers // nullptr because ibo already bound to gpu
+
+        // LEGACY error checking
+        GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr)); // draw square with index buffers // nullptr because ibo already bound to gpu
 
         //draw_legacy_square(0, 1, 1);
+
 
         // Swap front and back buffers
         glfwSwapBuffers(window);
@@ -311,7 +337,7 @@ int main(void)
         glfwPollEvents();
     }
 
-    glDeleteProgram(shader);
+    GLCALL(glDeleteProgram(shader));
     
     END
 }
