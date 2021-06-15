@@ -25,26 +25,14 @@ struct ShaderSources
 struct Vect2
 {
     double x, y;
-
-    Vect2(double _x, double _y)
-        : x(_x), y(_y)
-    {}
 };
 struct Vect3
 {
     double x, y, z;
-
-    Vect3(double _x, double _y, double _z)
-        : x(_x), y(_y), z(_z)
-    {}
 };
 struct colorRGB
 {
     byte r, g, b;
-
-    colorRGB(byte _r, byte _g, byte _b)
-        : r(_r), g(_g), b(_b)
-    {}
 };
 typedef Vect2 coord2D;
 typedef Vect3 coord3D;
@@ -263,24 +251,36 @@ int main(void)
     std::cout << "OpenGL v" << glGetString(GL_VERSION) << std::endl;
 
 
-    // -- using static buffer to draw triangle (square top-left style)
+    // -- using static buffer to draw square (square top-left style) with index buffers
     // TODO: bad way of doing it
     float x = -0.5f, y = 0.5f,
-        base = 1, height = 1;
+        width = 1.0f, height = 1.0f;
 
-    float pos[6] = {
-        x         , y - height,
-        x + base/2, y         ,
-        x + base  , y - height
+    float pos[8] = {
+        x        , y - height, // index 0
+        x + width, y - height, // index 1
+        x + width, y         , // index 2
+        x        , y           // index 3
     };
 
     unsigned int buf;
     glGenBuffers(1, &buf);
     glBindBuffer(GL_ARRAY_BUFFER, buf);
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), pos, GL_STATIC_DRAW); // the positions are static. use GL_DYNAMIC_DRAW for positions that can change
+    glBufferData(GL_ARRAY_BUFFER, 4*2 * sizeof(float), pos, GL_STATIC_DRAW); // the positions are static. use GL_DYNAMIC_DRAW for positions that can change
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, nullptr);
+
+    // using INDEX BUFFERS
+    unsigned int indeces[6] = {
+        0, 1, 2, // first triangle
+        2, 3, 0  // second triangle
+    };           // 2 triangles to make a square
+    // bind the index buffer to GPU
+    unsigned int index_buf_obj;
+    glGenBuffers(1, &index_buf_obj);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buf_obj);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indeces, GL_STATIC_DRAW);
 
     // get shader from txt file
     ShaderSources src = parse_shader_file("res/shaders/basic.shader");
@@ -300,7 +300,8 @@ int main(void)
 
         //draw_legacy_triangle(-1, 1, 1, 1);
         //t.draw();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // glDrawArrays(GL_TRIANGLES, 0, 6); // draw triangle with static buffer
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr); // draw square with index buffers // nullptr because ibo already bound to gpu
 
         //draw_legacy_square(0, 1, 1);
 

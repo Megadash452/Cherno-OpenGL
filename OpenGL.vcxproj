@@ -148,7 +148,11 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="res\shaders\basic.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\triangledraw.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

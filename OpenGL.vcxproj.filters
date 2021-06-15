@@ -21,5 +21,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basic.shader" />
+    <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\triangledraw.txt" />
   </ItemGroup>
 </Project>
