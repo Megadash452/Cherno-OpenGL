@@ -1,12 +1,16 @@
 #include "Shapes.h"
 #include "Renderer.h"
-#include "Utils.h"
 #include <iostream>
 
+
 Shape2D::Shape2D(float _x, float _y, float _width, float _height, std::vector<float> _pos_verts, std::vector<unsigned int> _vert_inds, colorRGBA<float> _c)
-    : x(_x), y(_y), width(_width), height(_height), col(_c), num_verts(_pos_verts.size()), num_inds(_vert_inds.size()), layout(),
-    pos_verts(&_pos_verts[0]), vert_inds(&_vert_inds[0]), vert_arr(), vert_buf(pos_verts, num_verts * sizeof(float)), ind_buf(vert_inds, num_inds)
+    : x(_x), y(_y), width(_width), height(_height), col(_c),
+    num_verts(_pos_verts.size()), num_inds(_vert_inds.size()),
+    vert_arr(), layout(),
+    pos_verts(&_pos_verts[0]), vert_inds(&_vert_inds[0]),
+    vert_buf(pos_verts, num_verts * sizeof(float)), ind_buf(vert_inds, num_inds)
 {
+    // TODO: maybe not use initializer list??
     std::cout << "Shape2D consturctor";
 
     ASSERT(_pos_verts.size() % 2 == 0);
@@ -38,9 +42,7 @@ void Shape2D::draw()
 void Shape2D::set_shader(const char* shader_path)
 {
     // get shader from txt file
-    ShaderSources src = parse_shader_file(shader_path);
-    this->shader = CreateShader(src.vert, src.frag);
-    GLCALL(glUseProgram(this->shader));
+    // TODO:
 }
 
 void Shape2D::add_uniform(const char* u_name)
@@ -56,26 +58,26 @@ std::vector<int> Shape2D::get_uniforms()
 }
 
 
-Triangle::Triangle(float _x, float _y, float _width, float _height, colorRGBA<float> _c)
+VertexTriangle::VertexTriangle(float _x, float _y, float _width, float _height, Vect3<Vect2<float>> verteces, colorRGBA<float> _c)
     : Shape2D{ _x, _y, _width, _height,
-        { 
-            _x                , _y - _height,
-            _x + _width / 2.0f, _y          ,
-            _x + _width       , _y - _height 
+        {
+            verteces.x.x, verteces.x.y,
+            verteces.y.x, verteces.y.y,
+            verteces.z.x, verteces.z.y
         },
         { 0, 1, 2 }, _c
     }
 {}
-Triangle::Triangle(coord2D loc, float _width, float _height, colorRGBA<float> _c)
-    : Triangle{ loc.x, loc.y, _width, _height, _c }
+VertexTriangle::VertexTriangle(coord2D loc, float _width, float _height, Vect3<Vect2<float>> verteces, colorRGBA<float> _c)
+    : VertexTriangle{ loc.x, loc.y, _width, _height, verteces, _c }
 {}
-Triangle::Triangle(coord2D loc, Vect2<float> dimensions, colorRGBA<float> _c)
-    : Triangle{ loc.x, loc.y, dimensions.x, dimensions.y, _c }
+VertexTriangle::VertexTriangle(coord2D loc, Vect2<float> dimensions, Vect3<Vect2<float>> verteces, colorRGBA<float> _c)
+    : VertexTriangle{ loc.x, loc.y, dimensions.x, dimensions.y, verteces, _c }
 {}
 
 
 
-void Triangle::draw()
+void VertexTriangle::draw()
 {
 
 
@@ -92,4 +94,4 @@ void Triangle::draw()
     //glEnd();
 }
 
-const unsigned int Triangle::vert_indeces[3] = { 0, 1, 2 };
+const unsigned int VertexTriangle::vert_indeces[3] = { 0, 1, 2 };

@@ -27,7 +27,7 @@
     <ClCompile Include="src\CPP\Buffers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CPP\Utils.cpp">
+    <ClCompile Include="src\CPP\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,7 +51,7 @@
     <ClInclude Include="src\HPP\Buffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\HPP\Utils.h">
+    <ClInclude Include="src\HPP\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "Shapes.h"
 #include "Buffers.h"
-#include "Utils.h"
+#include "Shader.h"
 
 #include <iostream>
 #include <fstream>
@@ -134,31 +134,30 @@ int main(void)
         // struct IndexBuffer
         IndexBuffer first_ib{ first_vert_indeces, 6 };
 
-        // get shader from txt file
-        ShaderSources src = parse_shader_file(DEFAULT_SHADER_FILE);
-        unsigned int basic_shader = CreateShader(src.vert, src.frag);
-        GLCALL(glUseProgram(basic_shader));
-
-        // inject an uniform (sep func)
-        GLCALL(int u_color = glGetUniformLocation(basic_shader, "u_color"));
-        ASSERT(u_color != -1);
-        // -- 
-
-
-        // unbind shaders and buffers
-        GLCALL(glBindVertexArray(0));
-        GLCALL(glUseProgram(0));
-        GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-        GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-        //Triangle t{ 1.0f, 1.0f, 1.0f, 1.0f };
-        //Shape2D s{ coord{ -1.0f, 1.0f }, Vect2<float>{ 2.0f, 2.0f }, 4 };
-
-        colorRGBA<float> col{ 0.3f, 0.5f, 1.0f, 1.0f };
+        // square's color
+        colorRGBA<float> first_color{ 0.3f, 0.5f, 1.0f, 1.0f };
         // true is increasing, false is decreasing
         bool r_state = true;
         bool g_state = true;
         bool b_state = true;
+
+        // shader for square
+        Shader first_shader{ DEFAULT_SHADER_FILE };
+        first_shader.bind();
+
+        // unbind shaders and buffers to create other shapes after
+        first_va.unbind();
+        first_shader.undind();
+        first_vb.unbind();
+        first_ib.unbind();
+        // -- 
+
+
+        // square 2
+        /*Shape2D s{ { 0.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 0.0f - 1.0f, 0.0f + 1.0f, 0.0f - 1.0f, 0.0f + 1.0f, 0.0f, 0.0f, 0.0f }, { 0, 1, 2, 2, 3, 1 } };*/
+        //Triangle t{ 1.0f, 1.0f, 1.0f, 1.0f };
+        //Shape2D s{ coord{ -1.0f, 1.0f }, Vect2<float>{ 2.0f, 2.0f }, 4 };
+
 
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window))
@@ -167,40 +166,36 @@ int main(void)
             glClear(GL_COLOR_BUFFER_BIT);
 
             // --- draw first shape (square)
-            GLCALL(glUseProgram(basic_shader));
-            GLCALL(glUniform4f(  // pass white color (vec4) to uniform in fragment shader
-                u_color,
-                col.r, col.g, col.b, col.a
-            ));
-
+            first_shader.bind();
+            first_shader.set_uniform("u_color", first_color);
             first_va.bind();
             first_ib.bind();
-
-            GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr)); // draw square with index buffers // nullptr because ibo already bound to gpu
 
             float dc = 0.004f; // change in color
             // red
             if (r_state) {
-                col.r += dc;
-                if (col.r > 1.0f)
+                first_color.r += dc;
+                if (first_color.r > 1.0f)
                     r_state = false;
             }
             else {
-                col.r -= dc;
-                if (col.r < 0.0f)
+                first_color.r -= dc;
+                if (first_color.r < 0.0f)
                     r_state = true;
             }
             // green
             if (g_state) {
-                col.g += dc * 2;
-                if (col.g > 1.0f)
+                first_color.g += dc * 2;
+                if (first_color.g > 1.0f)
                     g_state = false;
             }
             else {
-                col.g -= dc * 2;
-                if (col.g < 0.0f)
+                first_color.g -= dc * 2;
+                if (first_color.g < 0.0f)
                     g_state = true;
             }
+
+            GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr)); // draw square with index buffers // nullptr because ibo already bound to gpu
             // ---
 
             //draw_legacy_triangle(-1, 1, 1, 1);
@@ -216,10 +211,8 @@ int main(void)
             // Poll for and process events
             glfwPollEvents();
         }
+        // delete heap allocated buffers and shaders
 
-        glDeleteProgram(basic_shader);
-
-        // delete heap allocated buffers
     }
     
     END

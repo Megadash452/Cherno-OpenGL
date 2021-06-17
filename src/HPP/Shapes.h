@@ -3,6 +3,7 @@
 
 #include "Structs.h"
 #include "Buffers.h"
+#include "Shader.h"
 
 #define DEFAULT_SHADER_FILE "res/shaders/basic.shader"
 /// NOO, include respective file
@@ -38,25 +39,26 @@ protected:
 
     unsigned int shader;
 
-    VertexBuffer_Layout layout;
     VertexArray  vert_arr;
     VertexBuffer vert_buf;
+    VertexBuffer_Layout layout;
     IndexBuffer  ind_buf;
+    Shader shader;
 
     std::vector<int> uniforms;
 };
 
-struct Triangle : public Shape2D // legacy
+struct VertexTriangle : public Shape2D // legacy
 {
     float& base = this->width;
 
 
-    Triangle(float _x, float _y, float _width, float _height, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
-    Triangle(coord2D loc, float _width, float _height, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
-    Triangle(coord2D loc, Vect2<float> dimensions, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
+    VertexTriangle(float _x, float _y, float _width, float _height, Vect3<Vect2<float>> verteces, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
+    VertexTriangle(coord2D loc, float _width, float _height, Vect3<Vect2<float>> verteces, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
+    VertexTriangle(coord2D loc, Vect2<float> dimensions, Vect3<Vect2<float>> verteces, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
 
     void draw() override;
-    static const unsigned int* get_vert_indeces() { return Triangle::vert_indeces; }
+    static const unsigned int* get_vert_indeces() { return VertexTriangle::vert_indeces; }
 
 private:
     const static unsigned int vert_indeces[3];

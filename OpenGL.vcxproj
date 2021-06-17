@@ -147,9 +147,9 @@
   <ItemGroup>
     <ClCompile Include="src\CPP\main.cpp" />
     <ClCompile Include="src\CPP\Renderer.cpp" />
+    <ClCompile Include="src\CPP\Shader.cpp" />
     <ClCompile Include="src\CPP\Shapes.cpp" />
     <ClCompile Include="src\CPP\Buffers.cpp" />
-    <ClCompile Include="src\CPP\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -160,10 +160,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\HPP\Renderer.h" />
+    <ClInclude Include="src\HPP\Shader.h" />
     <ClInclude Include="src\HPP\Shapes.h" />
     <ClInclude Include="src\HPP\Structs.h" />
     <ClInclude Include="src\HPP\Buffers.h" />
-    <ClInclude Include="src\HPP\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
