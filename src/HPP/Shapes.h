@@ -1,9 +1,8 @@
 #pragma once
 #include <vector>
 
+#include "Renderer.h"
 #include "Structs.h"
-#include "Buffers.h"
-#include "Shader.h"
 
 #define DEFAULT_SHADER_FILE "res/shaders/basic.shader"
 /// NOO, include respective file
@@ -23,10 +22,8 @@ struct Shape2D
     Shape2D(coord2D loc, Vect2<float> dimensions, std::vector<float> _pos_verts, std::vector<unsigned int> _vert_inds, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
     ~Shape2D();
 
-    virtual void draw();
+    virtual void draw(void(*handler)() = [](){});
     void set_shader(const char* shader_path);
-    void add_uniform(const char* u_name);
-    std::vector<int> get_uniforms();
     //void set_verteces(float verteces[]);
     //void set_vertex(unsigned int vertex_index, float vertex);
     
@@ -36,8 +33,6 @@ protected:
 
     float* pos_verts;
     unsigned int* vert_inds;
-
-    unsigned int shader;
 
     VertexArray  vert_arr;
     VertexBuffer vert_buf;
@@ -57,7 +52,7 @@ struct VertexTriangle : public Shape2D // legacy
     VertexTriangle(coord2D loc, float _width, float _height, Vect3<Vect2<float>> verteces, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
     VertexTriangle(coord2D loc, Vect2<float> dimensions, Vect3<Vect2<float>> verteces, colorRGBA<float> _c = { 1.0f, 1.0f, 1.0f, 1.0f });
 
-    void draw() override;
+    //void draw(void(*handler)() = []() {}) override;
     static const unsigned int* get_vert_indeces() { return VertexTriangle::vert_indeces; }
 
 private:

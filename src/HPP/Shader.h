@@ -11,7 +11,7 @@ struct Shader
 	~Shader();
 
 	void bind() const;
-	void undind() const;
+	void unbind() const;
 
 	void set_uniform(const string& name, Vect4<float>);
 	void set_uniform(const string& name, Vect3<float>);

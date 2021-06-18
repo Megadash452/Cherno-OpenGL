@@ -27,7 +27,7 @@ void Shader::bind() const
 {
 	GLCALL(glUseProgram(this->shader_buf));
 }
-void Shader::undind() const
+void Shader::unbind() const
 {
     GLCALL(glUseProgram(0));
 }
@@ -76,7 +76,7 @@ unsigned int Shader::create_shaders()
     GLCALL(glValidateProgram(prgrm));
 
     // delete shaders
-#   if NDEBUG
+#   ifdef NDEBUG
         GLCALL(glDetachShader(prgrm, vs)); // remove for debugging
         GLCALL(glDetachShader(prgrm, fs)); // remove for debugging
 #   endif

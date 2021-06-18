@@ -1,5 +1,9 @@
 #pragma once
+#include "Buffers.h"
+#include "Shader.h"
 #include <GL/glew.h>
+
+#include <unordered_map>
 
 #define DEFAULT_SHADER_FILE "res/shaders/basic.shader"
 // relative to solution directory
@@ -12,3 +16,9 @@
 // error handling with glGetError() (legacy way)
 void GLClearError();
 bool GLLogCall(const char* file, const char* func, int line);
+
+struct Renderer2D
+{
+	void clear() const;
+	void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+};
