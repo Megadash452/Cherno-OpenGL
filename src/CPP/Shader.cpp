@@ -143,26 +143,20 @@ void Shader::parse_file()
 }
 
 
-void Shader::set_uniform(const string& name, Vect4<float> v)
+void Shader::set_uniform(const string& name, const Vect4<float>& v)
 {
     GLCALL(glUniform4f( // pass vec4 to uniform in fragment shader
         this->get_uniform_location(name),
         v.x, v.y, v.z, v.w
     ));
 }
-void Shader::set_uniform(const string& name, Vect3<float> v)
+void Shader::set_uniform(const string& name, const Vect3<float>& v)
 {
-    GLCALL(glUniform3f(
-        this->get_uniform_location(name),
-        v.x, v.y, v.z
-    ));
+    GLCALL(glUniform3f(this->get_uniform_location(name), v.x, v.y, v.z));
 }
-void Shader::set_uniform(const string& name, Vect2<float> v)
+void Shader::set_uniform(const string& name, const Vect2<float>& v)
 {
-    GLCALL(glUniform2f(
-        this->get_uniform_location(name),
-        v.x, v.y
-    ));
+    GLCALL(glUniform2f(this->get_uniform_location(name), v.x, v.y));
 }
 void Shader::set_uniform(const string& name, float v)
 {
@@ -175,6 +169,11 @@ void Shader::set_uniform(const string& name, double v)
 void Shader::set_uniform(const string& name, int v)
 {
     GLCALL(glUniform1i(this->get_uniform_location(name), v));
+}
+
+void Shader::set_uniform(const string& name, const glm::mat4& matrix)
+{
+    GLCALL(glUniformMatrix4fv(this->get_uniform_location(name), 1, GL_FALSE, &matrix[0][0]));
 }
 
 

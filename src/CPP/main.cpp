@@ -1,6 +1,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
+
 #include "Renderer.h"
 #include "Shapes.h"
 
@@ -147,8 +150,11 @@ int main(void)
         // index buffer must be defined after layout for buffers is set
         IndexBuffer first_ib{ first_vert_indeces, 6 };
 
+        glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
         Shader first_shader{ "res/shaders/texture.shader" };
         first_shader.set_uniform("u_color", first_color);
+        first_shader.set_uniform("u_MVP", proj);
 
         // OPTIONAL - Texture
         Texture first_texture{"res/textures/heart of the mountain.png"};
