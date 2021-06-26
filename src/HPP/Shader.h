@@ -13,6 +13,9 @@ struct Shader
 	void bind() const;
 	void unbind() const;
 
+	void set_uniform(const string& name, int);
+	void set_uniform(const string& name, float);
+	void set_uniform(const string& name, double);
 	void set_uniform(const string& name, Vect4<float>);
 	void set_uniform(const string& name, Vect3<float>);
 	void set_uniform(const string& name, Vect2<float>);

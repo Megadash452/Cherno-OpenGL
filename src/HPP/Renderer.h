@@ -9,8 +9,12 @@
 // relative to solution directory
 
 #define ASSERT(x) if (!(x)) __debugbreak()
-#define GLCALL(x) GLClearError(); x; ASSERT(GLLogCall(__FILE__, #x, __LINE__))
+#if _DEBUG
+#	define GLCALL(x) GLClearError(); x; ASSERT(GLLogCall(__FILE__, #x, __LINE__))
 // #x will turn x into a string (const char*) e.g. x = glDraw(), #x = "glDraw()"
+#elif
+#	define GLCALL(x) x;
+#endif
 
 
 // error handling with glGetError() (legacy way)

@@ -7,7 +7,7 @@ struct Texture
 	Texture(const string& file_path);
 	~Texture();
 
-	void bind(unsigned int slot = 0);
+	void bind(unsigned int slot=0);
 	void unbind();
 
 	void get_width() const;
@@ -15,7 +15,7 @@ struct Texture
 
 private:
 	unsigned int texture_buf;
-	unsigned char* local_buf;
+	unsigned char* img_buf;
 	string file_path;
 
 	int width, height, BPP;

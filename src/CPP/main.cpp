@@ -98,6 +98,10 @@ int main(void)
     }
     std::cout << "OpenGL v" << glGetString(GL_VERSION) << std::endl;
 
+    // for textures
+    GLCALL(glEnable(GL_BLEND));
+    GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
     /// OpenGL Scope
     {
         // -- using static buffer to create square (square top-left style) with index buffers
@@ -106,20 +110,21 @@ int main(void)
             width = 2.0f, height = 2.0f;
 
         // square's color
-        colorRGBA<float> first_color{ 0.3f, 0.5f, 1.0f, 1.0f };
+        colorRGBA<float> first_color{ 0.3f, 0.5f, 1.0f, 0.5f };
         // true is increasing, false is decreasing
         bool r_state = true;
         bool g_state = true;
         bool b_state = true;
+        bool a_state = true;
 
-        const unsigned int num_verts = 8;
+        const unsigned int num_verts = 16;
         const unsigned int num_inds = 6;
 
-        float first_pos_Verteces[8] = {
-            x        , y - height, // index 0
-            x + width, y - height, // index 1
-            x + width, y         , // index 2
-            x        , y           // index 3
+        float first_pos_Verteces[16] = {       // texture coords
+            x        , y - height, /* index 0 */ 0.0f, 0.0f, // bottom-left
+            x + width, y - height, /* index 1 */ 1.0f, 0.0f, // bottom-right
+            x + width, y         , /* index 2 */ 1.0f, 1.0f, // top   -right
+            x        , y         , /* index 3 */ 0.0f, 1.0f  // top   -left
         };
 
         // using INDEX BUFFERS
@@ -132,23 +137,29 @@ int main(void)
         ASSERT(num_inds % 3 == 0);
 
         VertexArray first_va{  };
-        VertexBuffer first_vb{ first_pos_Verteces, 8 * sizeof(float) };
+        VertexBuffer first_vb{ first_pos_Verteces, 16 * sizeof(float) };
         VertexBuffer_Layout first_layout;
         
         first_layout.push<float>(2); // 2D - two dimensional
+        first_layout.push<float>(2); // 2D Texture coords
         first_va.add_buf(first_vb, first_layout);
 
         // index buffer must be defined after layout for buffers is set
         IndexBuffer first_ib{ first_vert_indeces, 6 };
-        Shader first_shader{ DEFAULT_SHADER_FILE };
+
+        Shader first_shader{ "res/shaders/basic_color.shader" };
+        first_shader.set_uniform("u_color", first_color);
 
         // OPTIONAL - Texture
+        //Texture first_texture{"res/textures/heart.png"};
+        //first_texture.bind();
+        //first_shader.set_uniform("u_texture", 0);
 
         // unbind shaders and buffers to create other shapes after
         first_va.unbind();
-        first_shader.unbind();
         first_vb.unbind();
         first_ib.unbind();
+        first_shader.unbind();
         // -- 
 
 
@@ -168,33 +179,44 @@ int main(void)
             /* -- - draw first shape(square)*/ {
                 float dc = 0.004f; // change in color
                 // red
-                if (r_state) {
-                    first_color.r += dc;
-                    if (first_color.r > 1.0f)
-                        r_state = false;
+                //if (r_state) {
+                //    first_color.r += dc;
+                //    if (first_color.r > 1.0f)
+                //        r_state = false;
+                //}
+                //else {
+                //    first_color.r -= dc;
+                //    if (first_color.r < 0.0f)
+                //        r_state = true;
+                //}
+                //// green
+                //if (g_state) {
+                //    first_color.g += dc * 2;
+                //    if (first_color.g > 1.0f)
+                //        g_state = false;
+                //}
+                //else {
+                //    first_color.g -= dc * 2;
+                //    if (first_color.g < 0.0f)
+                //        g_state = true;
+                //}
+                // alpha
+                if (a_state) {
+                    first_color.a += dc * 4;
+                    if (first_color.a > 1.0f)
+                        a_state = false;
                 }
                 else {
-                    first_color.r -= dc;
-                    if (first_color.r < 0.0f)
-                        r_state = true;
-                }
-                // green
-                if (g_state) {
-                    first_color.g += dc * 2;
-                    if (first_color.g > 1.0f)
-                        g_state = false;
-                }
-                else {
-                    first_color.g -= dc * 2;
-                    if (first_color.g < 0.0f)
-                        g_state = true;
+                    first_color.a -= dc * 4;
+                    if (first_color.a < 0.0f)
+                        a_state = true;
                 }
             }
-
             first_shader.bind();
             first_shader.set_uniform("u_color", first_color);
             renderer.draw(first_va, first_ib, first_shader);
             // ---
+
 
             //draw_legacy_triangle(-1, 1, 1, 1);
             //t.draw();

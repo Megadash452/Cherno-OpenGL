@@ -4,7 +4,7 @@
 VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {
     GLCALL(glGenBuffers(1, &this->buf_id));
-    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, this->buf_id)); // bind buffer to gpu
+    this->bind();
     GLCALL(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
     // the positions are static. use GL_DYNAMIC_DRAW for positions that can change
 }
@@ -16,7 +16,7 @@ VertexBuffer::~VertexBuffer()
 
 void VertexBuffer::bind() const
 {
-    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, this->buf_id));
+    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, this->buf_id)); // bind buffer to gpu
 }
 
 void VertexBuffer::unbind() const
@@ -60,12 +60,12 @@ IndexBuffer::~IndexBuffer()
 
 void IndexBuffer::bind() const
 {
-    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, this->buf_id));
+    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, this->buf_id)); // Element array buffer??
 }
 
 void IndexBuffer::unbind() const
 {
-    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0)); // Element array buffer??
 }
 
 
@@ -73,6 +73,7 @@ void IndexBuffer::unbind() const
 VertexArray::VertexArray()
 {
     GLCALL(glGenVertexArrays(1, &this->buf_id));
+    this->bind();
 }
 
 VertexArray::~VertexArray()

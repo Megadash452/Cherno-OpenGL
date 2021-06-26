@@ -3,6 +3,7 @@
 
 #include "Renderer.h"
 #include "Structs.h"
+#include "Texture.h"
 
 #define DEFAULT_SHADER_FILE "res/shaders/basic.shader"
 /// NOO, include respective file

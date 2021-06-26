@@ -155,7 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="res\shaders\basic.shader" />
+    <None Include="res\shaders\basic_color.shader" />
+    <None Include="res\shaders\texture.shader" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\triangledraw.txt" />
@@ -170,7 +171,8 @@
     <ClInclude Include="src\HPP\Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\textures\Red Heart.png" />
+    <Image Include="res\textures\heart of the mountain.png" />
+    <Image Include="res\textures\heart.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

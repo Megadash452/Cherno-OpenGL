@@ -16,6 +16,7 @@ Shader::Shader(const string& rel_path)
 {
     this->parse_file();
     this->shader_buf = this->create_shaders();
+    this->bind();
 }
 Shader::~Shader()
 {
@@ -109,12 +110,12 @@ void Shader::parse_file()
 
         while (getline(shader_file, line))
         {
-            // line comment
-            if (line[0] == '/' && line[1] == '/')
-                continue;
+            //// line comment
+            //if (line[0] == '/' && line[1] == '/')
+            //    continue;
 
             // shader type identifier
-            else if (line.find("#shader") != string::npos)
+            if (line.find("#shader") != string::npos)
                 if (line.find("vertex") != string::npos)
                     shader_type = ShaderType::VERTEX;
 
@@ -163,6 +164,19 @@ void Shader::set_uniform(const string& name, Vect2<float> v)
         v.x, v.y
     ));
 }
+void Shader::set_uniform(const string& name, float v)
+{
+    GLCALL(glUniform1f(this->get_uniform_location(name), v));
+}
+void Shader::set_uniform(const string& name, double v)
+{
+    this->set_uniform(name, (float)v);
+}
+void Shader::set_uniform(const string& name, int v)
+{
+    GLCALL(glUniform1i(this->get_uniform_location(name), v));
+}
+
 
 int Shader::get_uniform_location(const string& name)
 {

@@ -38,8 +38,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\basic.shader" />
+    <None Include="res\shaders\basic_color.shader" />
     <None Include=".gitignore" />
+    <None Include="res\shaders\texture.shader" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\triangledraw.txt" />
@@ -68,7 +69,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\textures\Red Heart.png">
+    <Image Include="res\textures\heart.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\heart of the mountain.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
