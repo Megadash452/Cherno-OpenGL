@@ -107,7 +107,7 @@ int main(void)
         // -- using static buffer to create square (square top-left style) with index buffers
         // TODO: use class
         float x = -1.0f, y = 1.0f,
-            width = 2.0f, height = 2.0f;
+            width = 1.0f, height = 1.0f;
 
         // square's color
         colorRGBA<float> first_color{ 0.3f, 0.5f, 1.0f, 0.5f };
@@ -147,13 +147,12 @@ int main(void)
         // index buffer must be defined after layout for buffers is set
         IndexBuffer first_ib{ first_vert_indeces, 6 };
 
-        Shader first_shader{ "res/shaders/basic_color.shader" };
+        Shader first_shader{ "res/shaders/texture.shader" };
         first_shader.set_uniform("u_color", first_color);
 
         // OPTIONAL - Texture
-        //Texture first_texture{"res/textures/heart.png"};
-        //first_texture.bind();
-        //first_shader.set_uniform("u_texture", 0);
+        Texture first_texture{"res/textures/heart of the mountain.png"};
+        first_shader.set_uniform("u_texture", 0);
 
         // unbind shaders and buffers to create other shapes after
         first_va.unbind();

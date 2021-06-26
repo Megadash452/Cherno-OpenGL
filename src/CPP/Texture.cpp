@@ -20,6 +20,8 @@ Texture::Texture(const string& file_path)
 
 	if (this->img_buf)
 		stbi_image_free(this->img_buf);
+
+	this->bind();
 }
 
 Texture::~Texture()
