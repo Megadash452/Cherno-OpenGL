@@ -5,7 +5,7 @@
 Texture::Texture(const string& file_path)
 	: texture_buf(0), file_path(file_path), img_buf(nullptr), width(0), height(0), BPP(0)
 {
-	stbi_set_flip_vertically_on_load(1);
+	//stbi_set_flip_vertically_on_load(1);
 	this->img_buf = stbi_load(this->file_path.c_str(), &this->width, &this->height, &this->BPP, 4); // 4->rgba
 
 	GLCALL(glGenTextures(1, &this->texture_buf));
@@ -21,7 +21,7 @@ Texture::Texture(const string& file_path)
 	if (this->img_buf)
 		stbi_image_free(this->img_buf);
 
-	this->bind();
+	//this->bind();
 }
 
 Texture::~Texture()

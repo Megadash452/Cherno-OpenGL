@@ -41,9 +41,9 @@ template<typename number> struct Vect4
 
 template<typename number> struct colorRGB : public Vect3<number>
 {
-    number& r = this->x,
-        g = this->y,
-        b = this->z;
+    number& r = this->x;
+    number& g = this->y;
+    number& b = this->z;
 
     colorRGB(number _r, number _g, number _b)
         : Vect3<number>{ _r, _g, _b }
@@ -52,36 +52,13 @@ template<typename number> struct colorRGB : public Vect3<number>
         this->g = _g;
         this->b = _b;
     }
-    /*colorRGB(float _r, float _g, float _b)
-    {
-        if (_r > 1.0f)
-            this->r = 1.0f;
-        else if (_r < 0.0f)
-            this->r = 0.0f;
-        else
-            this->r = _r;
-
-        if (_g > 1.0f)
-            this->g = 1.0f;
-        else if (_g < 0.0f)
-            this->g = 0.0f;
-        else
-            this->g = _g;
-
-        if (_b > 1.0f)
-            this->b = 1.0f;
-        else if (_b < 0.0f)
-            this->b = 0.0f;
-        else
-            this->b = _b;
-    }*/
 };
 template<typename number> struct colorRGBA : public Vect4<number>
 {
-    number& r = this->x,
-        g = this->y,
-        b = this->z,
-        a = this->w;
+    number& r = this->x;
+    number& g = this->y;
+    number& b = this->z;
+    number& a = this->w;
 
     colorRGBA(number _r, number _g, number _b, number _a)
         : Vect4<number>{ _r, _g, _b, _a }
@@ -89,41 +66,11 @@ template<typename number> struct colorRGBA : public Vect4<number>
     colorRGBA(const colorRGBA& c)
         : Vect4<number>{ c.r, c.g, c.b, c.a }
     {}
-    /*colorRGBA(float _r, float _g, float _b, float _a)
-    {
-        if      (_r > 1.0f)
-            this->r = 1.0f;
-        else if (_r < 0.0f)
-            this->r = 0.0f;
-        else
-            this->r = _r;
-
-        if      (_g > 1.0f)
-            this->g = 1.0f;
-        else if (_g < 0.0f)
-            this->g = 0.0f;
-        else
-            this->g = _g;
-
-        if      (_b > 1.0f)
-            this->b = 1.0f;
-        else if (_b < 0.0f)
-            this->b = 0.0f;
-        else
-            this->b = _b;
-
-        if (_a > 1.0f)
-            this->a = 1.0f;
-        else if (_a < 0.0f)
-            this->a = 0.0f;
-        else
-            this->a = _a;
-    }*/
 };
 
 typedef Vect2<float> coord2D;
 typedef Vect3<float> coord3D;
-typedef colorRGBA<float> color;
+//typedef colorRGBA<float> color;
 
 #if DIMENSIONS == 3
     typedef coord3D coord;

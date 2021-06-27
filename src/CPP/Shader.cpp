@@ -16,7 +16,7 @@ Shader::Shader(const string& rel_path)
 {
     this->parse_file();
     this->shader_buf = this->create_shaders();
-    this->bind();
+    //this->bind();
 }
 Shader::~Shader()
 {

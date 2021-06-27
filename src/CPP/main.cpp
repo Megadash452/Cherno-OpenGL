@@ -4,6 +4,9 @@
 #include <GLM/glm.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
 
+#include <ImGUI-1.60/imgui.h>
+#include <ImGUI-1.60/imgui_impl_glfw_gl3.h>
+
 #include "Renderer.h"
 #include "Shapes.h"
 
@@ -17,21 +20,21 @@ using std::string;
 
 
 /// NOT GOING TO WORK
-void draw_legacy_triangle(float x, float y, float b, float h, GLbyte R=127, GLbyte G=127, GLbyte B=127)
+void draw_legacy_triangle(float x, float y, float b, float h, GLbyte R = 127, GLbyte G = 127, GLbyte B = 127)
 {
     // Draw triangle with LEGACY OpenGL
     glColor3b(R, G, B);
     glBegin(GL_TRIANGLES);
 
     glVertex2f(x, y - h);     // left corner
-    glVertex2f(x + b/2, y);   // top corner
+    glVertex2f(x + b / 2, y);   // top corner
     glVertex2f(x + b, y - h); // right corner
 
     glEnd();
 }
 
 /// NOT GOING TO WORK
-void draw_legacy_square(float x, float y, float s, GLbyte R=127, GLbyte G=127, GLbyte B=127)
+void draw_legacy_square(float x, float y, float s, GLbyte R = 127, GLbyte G = 127, GLbyte B = 127)
 {
     GLCALL(glColor3b(R, G, B));
     GLCALL(glBegin(GL_QUADS););
@@ -69,6 +72,42 @@ string read_txt_file(const char* path)
 
 
 
+/// FOR SQUARE
+float x = 0.0f, y = 0.0f,
+width = 20.0f, height = 20.0f;
+colorRGBA<float> color{ 0.3f, 0.5f, 1.0f, 0.5f };
+
+//void set_x(float _x, float* v)
+//{
+//    // x = _x;
+//    v[0] = _x;
+//    v[4] = _x + width;
+//    v[8] = _x + width;
+//    v[12] = _x;
+//}
+//void set_y(float _y, float* v)
+//{
+//    // y = _y;
+//    v[1] = _y;
+//    v[5] = _y;
+//    v[9] = _y + height;
+//    v[13] = _y + height;
+//}
+//void set_width(float _w, float* v)
+//{
+//    // width = _w;
+//    v[4] = x + _w;
+//    v[8] = x + _w;
+//}
+//void set_height(float _h, float* v)
+//{
+//    // height = _h;
+//    v[9] = y + _h;
+//    v[13] = y + _h;
+//}
+
+
+
 int main(void)
 {
 
@@ -83,12 +122,13 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create a windowed mode window and its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(640, 480, "OpenGL", NULL, NULL);
+    Vect2<int> Resolution{ 640, 480 };
+    GLFWwindow* window = glfwCreateWindow(Resolution.x, Resolution.y, "OpenGL", NULL, NULL);
     if (!window)
         END_ERR
 
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
+        // Make the window's context current
+        glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // set framerate with v-sync
 
     {
@@ -96,8 +136,8 @@ int main(void)
         if (GLEW_OK != in)
         {
             std::cout << "Error initializing Modern OpenGL:\n"
-                      << glewGetErrorString(in);
-        }  
+                << glewGetErrorString(in);
+        }
     }
     std::cout << "OpenGL v" << glGetString(GL_VERSION) << std::endl;
 
@@ -108,30 +148,21 @@ int main(void)
     /// OpenGL Scope
     {
         // -- using static buffer to create square (square top-left style) with index buffers
-        // TODO: use class
-        float x = -1.0f, y = 1.0f,
-            width = 1.0f, height = 1.0f;
-
-        // square's color
-        colorRGBA<float> first_color{ 0.3f, 0.5f, 1.0f, 0.5f };
-        // true is increasing, false is decreasing
-        bool r_state = true;
-        bool g_state = true;
-        bool b_state = true;
-        bool a_state = true;
 
         const unsigned int num_verts = 16;
         const unsigned int num_inds = 6;
 
-        float first_pos_Verteces[16] = {       // texture coords
-            x        , y - height, /* index 0 */ 0.0f, 0.0f, // bottom-left
-            x + width, y - height, /* index 1 */ 1.0f, 0.0f, // bottom-right
-            x + width, y         , /* index 2 */ 1.0f, 1.0f, // top   -right
-            x        , y         , /* index 3 */ 0.0f, 1.0f  // top   -left
+        // TODO: On_X/Y/H/W_Change() or Set change only the ones that use that component
+        // e.g. => set x(float _x) { arr[0] = _x; arr[4] = _x + this->width; ... }
+        float first_pos_Verteces[num_verts] = {       // texture coords
+            x        , y         , /* index 0 */ 0.0f, 0.0f, // bottom-left
+            x + width, y         , /* index 1 */ 1.0f, 0.0f, // bottom-right
+            x + width, y + height, /* index 2 */ 1.0f, 1.0f, // top   -right
+            x        , y + height, /* index 3 */ 0.0f, 1.0f  // top   -left
         };
 
         // using INDEX BUFFERS
-        unsigned int first_vert_indeces[6] = {
+        unsigned int first_vert_indeces[num_inds] = {
             0, 1, 2, // first triangle
             2, 3, 0  // second triangle
         };           // 2 triangles to make a square
@@ -139,26 +170,39 @@ int main(void)
         ASSERT(num_verts % 2 == 0);
         ASSERT(num_inds % 3 == 0);
 
+        // true is increasing, false is decreasing
+        bool r_state = true;
+        bool g_state = true;
+        bool b_state = true;
+        bool a_state = true;
+
         VertexArray first_va{  };
-        VertexBuffer first_vb{ first_pos_Verteces, 16 * sizeof(float) };
+        VertexBuffer first_vb{ first_pos_Verteces, num_verts * sizeof(float) }; // TODO: find how to edit the values after passed to gpu
         VertexBuffer_Layout first_layout;
-        
+
+        Shader texture_shader{ "res/shaders/texture.shader" };
+        Shader basic_color{ "res/shaders/basic_color.shader" };
+        Shader& first_shader = texture_shader; // shader being used -- above are loaded shaders
+        first_shader.bind();
+
         first_layout.push<float>(2); // 2D - two dimensional
         first_layout.push<float>(2); // 2D Texture coords
         first_va.add_buf(first_vb, first_layout);
 
         // index buffer must be defined after layout for buffers is set
-        IndexBuffer first_ib{ first_vert_indeces, 6 };
-
-        glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-
-        Shader first_shader{ "res/shaders/texture.shader" };
-        first_shader.set_uniform("u_color", first_color);
-        first_shader.set_uniform("u_MVP", proj);
+        IndexBuffer first_ib{ first_vert_indeces, num_inds };
 
         // OPTIONAL - Texture
-        Texture first_texture{"res/textures/heart of the mountain.png"};
+        Texture first_texture{ "res/textures/heart.png" };
+        first_texture.bind();
         first_shader.set_uniform("u_texture", 0);
+
+        glm::mat4 proj_matrix = glm::ortho(0.0f, (float)Resolution.x, (float)Resolution.y, 0.0f, -1.0f, 1.0f); // origin on top-left
+        // TODO: write OnWindowResize() to push matrix uniform (u_MVP) to shader every time the window resolution changes
+        // move 0 pixels
+        glm::mat4 view_matrix = glm::translate(glm::mat4{ 1.0f }, glm::vec3{ 0, 0, 0 }); // view matrix acts as a camera, translates models
+        // move 100 pixels down
+        ///glm::mat4 modl_matrix = glm::translate(glm::mat4{ 1.0f }, glm::vec3{ 0, 100, 0 });
 
         // unbind shaders and buffers to create other shapes after
         first_va.unbind();
@@ -175,51 +219,69 @@ int main(void)
 
         Renderer2D renderer{};
 
+        /// IMGUI
+        ImGui::CreateContext();
+        ImGui_ImplGlfwGL3_Init(window, true);
+        ImGui::StyleColorsDark();
+
+        //glm::vec3 view_pos{ 0.0f, 0.0f, 0.0f };
+        glm::vec3 first_position{ 0.0f, 0.0f, 0.0f };
+
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window))
         {
             renderer.clear();
 
-
             /* -- - draw first shape(square)*/ {
                 float dc = 0.004f; // change in color
                 // red
                 //if (r_state) {
-                //    first_color.r += dc;
-                //    if (first_color.r > 1.0f)
+                //    color.r += dc;
+                //    if (color.r > 1.0f)
                 //        r_state = false;
                 //}
                 //else {
-                //    first_color.r -= dc;
-                //    if (first_color.r < 0.0f)
+                //    color.r -= dc;
+                //    if (color.r < 0.0f)
                 //        r_state = true;
                 //}
                 //// green
                 //if (g_state) {
-                //    first_color.g += dc * 2;
-                //    if (first_color.g > 1.0f)
+                //    color.g += dc * 2;
+                //    if (color.g > 1.0f)
                 //        g_state = false;
                 //}
                 //else {
-                //    first_color.g -= dc * 2;
-                //    if (first_color.g < 0.0f)
+                //    color.g -= dc * 2;
+                //    if (color.g < 0.0f)
                 //        g_state = true;
                 //}
-                // alpha
-                if (a_state) {
-                    first_color.a += dc * 4;
-                    if (first_color.a > 1.0f)
-                        a_state = false;
-                }
-                else {
-                    first_color.a -= dc * 4;
-                    if (first_color.a < 0.0f)
-                        a_state = true;
-                }
+                //// alpha
+                //if (a_state) {
+                //    color.a += dc * 0.4f;
+                //    if (color.a > 1.0f)
+                //        a_state = false;
+                //}
+                //else {
+                //    color.a -= dc * 0.4f;
+                //    if (color.a < 0.0f)
+                //        a_state = true;
+                //}
             }
-            first_shader.bind();
-            first_shader.set_uniform("u_color", first_color);
-            renderer.draw(first_va, first_ib, first_shader);
+            // move the object
+
+            glm::mat4 modl_matrix = glm::translate(glm::mat4{ 1.0f }, first_position);
+
+            // TODO: Hints on how to draw multiple objects with independent properties
+            // draw texture on colored rectangle
+            basic_color.bind();
+            basic_color.set_uniform("u_color", color);
+            basic_color.set_uniform("u_MVP", proj_matrix * view_matrix * modl_matrix);
+            renderer.draw(first_va, first_ib, basic_color);
+
+            texture_shader.bind(); // texture goes on top, after color is drawn
+            texture_shader.set_uniform("u_MVP", proj_matrix * view_matrix * modl_matrix);
+            renderer.draw(first_va, first_ib, texture_shader);
             // ---
 
 
@@ -231,6 +293,27 @@ int main(void)
             //draw_legacy_square(0.0f, 0.0f, 1);
 
 
+
+            /// --- IMGUI
+            ImGui_ImplGlfwGL3_NewFrame();
+            {
+                ImGui::Text("Color");
+                ImGui::ColorEdit4("RGBA Color", (float*)&color);
+                ImGui::SliderFloat("Opacity", &color.w, 0.0f, 1.0f);
+
+                ImGui::Text("Position");
+                ImGui::SliderFloat("X", &first_position.x, 0.0f, (float)(Resolution.x - width));
+                ImGui::SliderFloat("Y", &first_position.y, 0.0f, (float)(Resolution.y - height));
+                ImGui::SliderFloat("Z", &first_position.z, 0.0f, 1.0f);
+
+                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            }
+            ImGui::Render();
+            ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+            /// ---
+
+
+
             // Swap front and back buffers
             glfwSwapBuffers(window);
             // Poll for and process events
@@ -239,6 +322,8 @@ int main(void)
         // delete heap allocated buffers and shaders
 
     }
-    
+
+    ImGui_ImplGlfwGL3_Shutdown();
+    ImGui::DestroyContext();
     END
 }

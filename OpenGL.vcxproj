@@ -122,6 +122,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +138,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +149,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dep\ImGUI-1.60\imgui.cpp" />
+    <ClCompile Include="dep\ImGUI-1.60\imgui_demo.cpp" />
+    <ClCompile Include="dep\ImGUI-1.60\imgui_draw.cpp" />
+    <ClCompile Include="dep\ImGUI-1.60\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="src\CPP\main.cpp" />
     <ClCompile Include="src\CPP\Renderer.cpp" />
     <ClCompile Include="src\CPP\Shader.cpp" />
@@ -580,6 +588,13 @@
     <ClInclude Include="dep\GLM\vec3.hpp" />
     <ClInclude Include="dep\GLM\vec4.hpp" />
     <ClInclude Include="dep\GLM\vector_relational.hpp" />
+    <ClInclude Include="dep\ImGUI-1.60\imconfig.h" />
+    <ClInclude Include="dep\ImGUI-1.60\imgui.h" />
+    <ClInclude Include="dep\ImGUI-1.60\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="dep\ImGUI-1.60\imgui_internal.h" />
+    <ClInclude Include="dep\ImGUI-1.60\stb_rect_pack.h" />
+    <ClInclude Include="dep\ImGUI-1.60\stb_textedit.h" />
+    <ClInclude Include="dep\ImGUI-1.60\stb_truetype.h" />
     <ClInclude Include="src\HPP\Renderer.h" />
     <ClInclude Include="src\HPP\Shader.h" />
     <ClInclude Include="src\HPP\Shapes.h" />
