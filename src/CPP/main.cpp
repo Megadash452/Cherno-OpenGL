@@ -75,7 +75,8 @@ string read_txt_file(const char* path)
 /// FOR SQUARE
 float x = 0.0f, y = 0.0f,
 width = 20.0f, height = 20.0f;
-colorRGBA<float> color{ 0.3f, 0.5f, 1.0f, 0.5f };
+colorRGBA<float> color{ 0.3f, 0.5f, 1.0f, 1.0f };
+colorRGBA<float> copy_color{ 1.0f, 0.5f, 1.0f, 1.0f };
 
 //void set_x(float _x, float* v)
 //{
@@ -127,8 +128,8 @@ int main(void)
     if (!window)
         END_ERR
 
-        // Make the window's context current
-        glfwMakeContextCurrent(window);
+    // Make the window's context current
+    glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // set framerate with v-sync
 
     {
@@ -178,7 +179,7 @@ int main(void)
 
         VertexArray first_va{  };
         VertexBuffer first_vb{ first_pos_Verteces, num_verts * sizeof(float) }; // TODO: find how to edit the values after passed to gpu
-        VertexBuffer_Layout first_layout;
+        VertexBuffer_Layout first_layout{  };
 
         Shader texture_shader{ "res/shaders/texture.shader" };
         Shader basic_color{ "res/shaders/basic_color.shader" };
@@ -226,6 +227,7 @@ int main(void)
 
         //glm::vec3 view_pos{ 0.0f, 0.0f, 0.0f };
         glm::vec3 first_position{ 0.0f, 0.0f, 0.0f };
+        glm::vec3 copy_position{ 100.0f, 0.0f, 0.0f };
 
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window))
@@ -270,19 +272,38 @@ int main(void)
             }
             // move the object
 
-            glm::mat4 modl_matrix = glm::translate(glm::mat4{ 1.0f }, first_position);
+            
 
             // TODO: Hints on how to draw multiple objects with independent properties
-            // draw texture on colored rectangle
-            basic_color.bind();
-            basic_color.set_uniform("u_color", color);
-            basic_color.set_uniform("u_MVP", proj_matrix * view_matrix * modl_matrix);
-            renderer.draw(first_va, first_ib, basic_color);
+            /// draw texture on colored rectangle
+            {
+                glm::mat4 modl_matrix = glm::translate(glm::mat4{ 1.0f }, first_position);
+                glm::mat4 mvp = proj_matrix * view_matrix * modl_matrix;
 
-            texture_shader.bind(); // texture goes on top, after color is drawn
-            texture_shader.set_uniform("u_MVP", proj_matrix * view_matrix * modl_matrix);
-            renderer.draw(first_va, first_ib, texture_shader);
-            // ---
+                basic_color.bind();
+                basic_color.set_uniform("u_color", color);
+                basic_color.set_uniform("u_MVP", mvp);
+                renderer.draw(first_va, first_ib, basic_color);
+
+                texture_shader.bind(); // texture goes on top, after color is drawn
+                texture_shader.set_uniform("u_MVP", mvp);
+                renderer.draw(first_va, first_ib, texture_shader);
+            } /// ---
+
+            /// -- copy of first object --
+            {
+                glm::mat4 modl_matrix = glm::translate(glm::mat4{ 1.0f }, copy_position);
+                glm::mat4 mvp = proj_matrix * view_matrix * modl_matrix;
+
+                basic_color.bind();
+                basic_color.set_uniform("u_color", copy_color);
+                basic_color.set_uniform("u_MVP", mvp);
+                renderer.draw(first_va, first_ib, basic_color);
+
+                texture_shader.bind(); // texture goes on top, after color is drawn
+                texture_shader.set_uniform("u_MVP", mvp);
+                renderer.draw(first_va, first_ib, texture_shader);
+            } /// ---
 
 
             //draw_legacy_triangle(-1, 1, 1, 1);
@@ -305,6 +326,11 @@ int main(void)
                 ImGui::SliderFloat("X", &first_position.x, 0.0f, (float)(Resolution.x - width));
                 ImGui::SliderFloat("Y", &first_position.y, 0.0f, (float)(Resolution.y - height));
                 ImGui::SliderFloat("Z", &first_position.z, 0.0f, 1.0f);
+
+                ImGui::Text("Copy Position");
+                ImGui::SliderFloat("x", &copy_position.x, 0.0f, (float)(Resolution.x - width));
+                ImGui::SliderFloat("y", &copy_position.y, 0.0f, (float)(Resolution.y - height));
+                ImGui::SliderFloat("z", &copy_position.z, 0.0f, 1.0f);
 
                 ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             }

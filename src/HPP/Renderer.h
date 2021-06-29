@@ -1,6 +1,7 @@
 #pragma once
 #include "Buffers.h"
 #include "Shader.h"
+#include "Shapes.h"
 #include <GL/glew.h>
 
 #include <unordered_map>
@@ -25,16 +26,16 @@ bool GLLogCall(const char* file, const char* func, int line);
 struct Renderer2D
 {
 	void clear() const;
-	//void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
-	void draw(Texture t) const;
-
-private:
-	VertexArray va;
-	VertexBuffer vb;
-	VertexBuffer_Layout vl;
-	std::vector<Shader> shaders;
-	IndexBuffer ib;
-
-	glm::mat4 proj_matrix;
-	glm::mat4 view_matrix;
+	void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+//	void draw(Texture t) const;
+//
+//private:
+//	VertexArray va;
+//	VertexBuffer vb;
+//	VertexBuffer_Layout vl;
+//	std::vector<Shader> shaders;
+//	IndexBuffer ib;
+//
+//	glm::mat4 proj_matrix;
+//	glm::mat4 view_matrix;
 };
