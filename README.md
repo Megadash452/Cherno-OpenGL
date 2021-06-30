@@ -6,7 +6,7 @@
 # Pull Instructions
 
 If you set the run and build configurations to x86 and you are still getting include errors, enter the following information in your **Project Properties**.
-/After you pulling the repository, open the project (.sln) with Visual Studio. In the Solution Explorer, right click on the project and select **Properties**. Under the following /categories of **Configuration Properties**, paste the following information (make sure you are editing *ALL CONFIGURATIONS*:
+In Visual Studio, open the project (.sln) with Visual Studio. In the Solution Explorer, right click on the project and select **Properties**. Under the following categories of **Configuration Properties**, paste the following information (make sure you are editing *ALL CONFIGURATIONS*:
 
 #### *C/C++ > General* > **Additional Include Directories**
 > $(SolutionDir)dep;$(SolutionDir)dep\GLFW\include;$(SolutionDir)dep\GLEW\include;$(SolutionDir)src\HPP
