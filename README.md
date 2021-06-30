@@ -1,7 +1,7 @@
 ## OpenGL
 
 # Pull Instructions
-After you pulling the repository, open the project (.sln) with Visual Studio. In the Solution Explorer, right click on the project and select **Properties**. Under the following categories of **Configuration Properties**, paste the follwing information:
+After you pulling the repository, open the project (.sln) with Visual Studio. In the Solution Explorer, right click on the project and select **Properties**. Under the following categories of **Configuration Properties**, paste the follwing information (make sure you are editing *ALL CONFIGURATIONS*:
 
 #### *C/C++ > General* > **Additional Include Directories**
 > $(SolutionDir)dep;$(SolutionDir)dep\GLFW\include;$(SolutionDir)dep\GLEW\include;$(SolutionDir)src\HPP
@@ -11,7 +11,8 @@ After you pulling the repository, open the project (.sln) with Visual Studio. In
 >> WIN32;\_CONSOLE;GLEW\_STATIC;%(PreprocessorDefinitions);\_DEBUG <br>
 
 > *Click the* **Configuration** *dropper and select **RELEASE***
->> WIN32;\_CONSOLE;GLEW\_STATIC;%(PreprocessorDefinitions);NDEBUG
+>> WIN32;\_CONSOLE;GLEW\_STATIC;%(PreprocessorDefinitions);NDEBUG <br>
+> *Click the* **Configuration** *dropper and select **ALL CONFIGURATIONS***
 
 #### *Linker > General* > **Additional Library Directories**
 > $(SolutionDir)dep\GLFW\lib-vc2019;dep\GLEW\lib\Release\Win32
