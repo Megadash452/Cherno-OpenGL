@@ -30,6 +30,7 @@ struct Renderer2D
 //	void draw(Texture t) const;
 //
 //private:
+// 	Vect4 clear_color;
 //	VertexArray va;
 //	VertexBuffer vb;
 //	VertexBuffer_Layout vl;

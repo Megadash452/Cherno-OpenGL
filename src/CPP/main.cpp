@@ -10,6 +10,8 @@
 #include "Renderer.h"
 #include "Shapes.h"
 
+#include "../src/Tests/ClearColorTest.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -75,7 +77,7 @@ string read_txt_file(const char* path)
 /// FOR SQUARE
 float x = 0.0f, y = 0.0f,
 width = 20.0f, height = 20.0f;
-colorRGBA<float> color{ 0.3f, 0.5f, 1.0f, 1.0f };
+colorRGBA<float> first_color{ 0.3f, 0.5f, 1.0f, 1.0f };
 colorRGBA<float> copy_color{ 1.0f, 0.5f, 1.0f, 1.0f };
 
 //void set_x(float _x, float* v)
@@ -229,10 +231,16 @@ int main(void)
         glm::vec3 first_position{ 0.0f, 0.0f, 0.0f };
         glm::vec3 copy_position{ 100.0f, 0.0f, 0.0f };
 
+        // TESTS
+        test::ClearColor test1{};
+
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window))
         {
-            renderer.clear();
+            //renderer.clear();
+
+            test1.onUpdate(0.0f);
+            test1.onRender();
 
             /* -- - draw first shape(square)*/ {
                 float dc = 0.004f; // change in color
@@ -277,13 +285,17 @@ int main(void)
             // TODO: Hints on how to draw multiple objects with independent properties
             /// draw texture on colored rectangle
             {
+                colorRGBA<float>& color = first_color;
                 glm::mat4 modl_matrix = glm::translate(glm::mat4{ 1.0f }, first_position);
                 glm::mat4 mvp = proj_matrix * view_matrix * modl_matrix;
 
-                basic_color.bind();
-                basic_color.set_uniform("u_color", color);
-                basic_color.set_uniform("u_MVP", mvp);
-                renderer.draw(first_va, first_ib, basic_color);
+                if (color.a != 0.0f) // if color is not completely transparent, draw square with that color
+                {
+                    basic_color.bind();
+                    basic_color.set_uniform("u_color", color);
+                    basic_color.set_uniform("u_MVP", mvp);
+                    renderer.draw(first_va, first_ib, basic_color);
+                }
 
                 texture_shader.bind(); // texture goes on top, after color is drawn
                 texture_shader.set_uniform("u_MVP", mvp);
@@ -292,13 +304,17 @@ int main(void)
 
             /// -- copy of first object --
             {
+                colorRGBA<float>& color = copy_color;
                 glm::mat4 modl_matrix = glm::translate(glm::mat4{ 1.0f }, copy_position);
                 glm::mat4 mvp = proj_matrix * view_matrix * modl_matrix;
 
-                basic_color.bind();
-                basic_color.set_uniform("u_color", copy_color);
-                basic_color.set_uniform("u_MVP", mvp);
-                renderer.draw(first_va, first_ib, basic_color);
+                if (color.a != 0.0f) // if color is not completely transparent, draw square with that color
+                {
+                    basic_color.bind();
+                    basic_color.set_uniform("u_color", color);
+                    basic_color.set_uniform("u_MVP", mvp);
+                    renderer.draw(first_va, first_ib, basic_color);
+                }
 
                 texture_shader.bind(); // texture goes on top, after color is drawn
                 texture_shader.set_uniform("u_MVP", mvp);
@@ -319,8 +335,8 @@ int main(void)
             ImGui_ImplGlfwGL3_NewFrame();
             {
                 ImGui::Text("Color");
-                ImGui::ColorEdit4("RGBA Color", (float*)&color);
-                ImGui::SliderFloat("Opacity", &color.w, 0.0f, 1.0f);
+                ImGui::ColorEdit4("RGBA Color", (float*)&first_color);
+                ImGui::SliderFloat("Opacity", &first_color.w, 0.0f, 1.0f);
 
                 ImGui::Text("Position");
                 ImGui::SliderFloat("X", &first_position.x, 0.0f, (float)(Resolution.x - width));
@@ -333,6 +349,8 @@ int main(void)
                 ImGui::SliderFloat("z", &copy_position.z, 0.0f, 1.0f);
 
                 ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+                test1.onImGuiRender();
             }
             ImGui::Render();
             ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());

@@ -48,7 +48,7 @@
     <ClCompile Include="dep\ImGUI-1.60\imgui_impl_glfw_gl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dep\ImGUI-1.60\main.cpp">
+    <ClCompile Include="src\Tests\ClearColorTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -464,6 +464,140 @@
     <None Include="dep\GLM\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="dep\GLEW\doc\advanced.html" />
+    <None Include="dep\GLEW\doc\basic.html" />
+    <None Include="dep\GLEW\doc\build.html" />
+    <None Include="dep\GLEW\doc\credits.html" />
+    <None Include="dep\GLEW\doc\glew.html" />
+    <None Include="dep\GLEW\doc\glxew.html" />
+    <None Include="dep\GLEW\doc\index.html" />
+    <None Include="dep\GLEW\doc\install.html" />
+    <None Include="dep\GLEW\doc\log.html" />
+    <None Include="dep\GLEW\doc\wglew.html" />
+    <None Include="dep\GLFW\docs\html\search\all_0.html" />
+    <None Include="dep\GLFW\docs\html\search\all_1.html" />
+    <None Include="dep\GLFW\docs\html\search\all_2.html" />
+    <None Include="dep\GLFW\docs\html\search\all_3.html" />
+    <None Include="dep\GLFW\docs\html\search\all_4.html" />
+    <None Include="dep\GLFW\docs\html\search\all_5.html" />
+    <None Include="dep\GLFW\docs\html\search\all_6.html" />
+    <None Include="dep\GLFW\docs\html\search\all_7.html" />
+    <None Include="dep\GLFW\docs\html\search\all_8.html" />
+    <None Include="dep\GLFW\docs\html\search\all_9.html" />
+    <None Include="dep\GLFW\docs\html\search\all_10.html" />
+    <None Include="dep\GLFW\docs\html\search\all_11.html" />
+    <None Include="dep\GLFW\docs\html\search\all_a.html" />
+    <None Include="dep\GLFW\docs\html\search\all_b.html" />
+    <None Include="dep\GLFW\docs\html\search\all_c.html" />
+    <None Include="dep\GLFW\docs\html\search\all_d.html" />
+    <None Include="dep\GLFW\docs\html\search\all_e.html" />
+    <None Include="dep\GLFW\docs\html\search\all_f.html" />
+    <None Include="dep\GLFW\docs\html\search\classes_0.html" />
+    <None Include="dep\GLFW\docs\html\search\defines_0.html" />
+    <None Include="dep\GLFW\docs\html\search\files_0.html" />
+    <None Include="dep\GLFW\docs\html\search\files_1.html" />
+    <None Include="dep\GLFW\docs\html\search\files_2.html" />
+    <None Include="dep\GLFW\docs\html\search\files_3.html" />
+    <None Include="dep\GLFW\docs\html\search\files_4.html" />
+    <None Include="dep\GLFW\docs\html\search\files_5.html" />
+    <None Include="dep\GLFW\docs\html\search\files_6.html" />
+    <None Include="dep\GLFW\docs\html\search\files_7.html" />
+    <None Include="dep\GLFW\docs\html\search\files_8.html" />
+    <None Include="dep\GLFW\docs\html\search\functions_0.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_0.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_1.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_2.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_3.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_4.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_5.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_6.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_7.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_8.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_9.html" />
+    <None Include="dep\GLFW\docs\html\search\groups_a.html" />
+    <None Include="dep\GLFW\docs\html\search\nomatches.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_0.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_1.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_2.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_3.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_4.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_5.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_6.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_7.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_8.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_9.html" />
+    <None Include="dep\GLFW\docs\html\search\pages_a.html" />
+    <None Include="dep\GLFW\docs\html\search\typedefs_0.html" />
+    <None Include="dep\GLFW\docs\html\search\variables_0.html" />
+    <None Include="dep\GLFW\docs\html\search\variables_1.html" />
+    <None Include="dep\GLFW\docs\html\search\variables_2.html" />
+    <None Include="dep\GLFW\docs\html\search\variables_3.html" />
+    <None Include="dep\GLFW\docs\html\search\variables_4.html" />
+    <None Include="dep\GLFW\docs\html\search\variables_5.html" />
+    <None Include="dep\GLFW\docs\html\search\variables_6.html" />
+    <None Include="dep\GLFW\docs\html\search\variables_7.html" />
+    <None Include="dep\GLFW\docs\html\bug.html" />
+    <None Include="dep\GLFW\docs\html\build_8dox.html" />
+    <None Include="dep\GLFW\docs\html\build_guide.html" />
+    <None Include="dep\GLFW\docs\html\compat_8dox.html" />
+    <None Include="dep\GLFW\docs\html\compat_guide.html" />
+    <None Include="dep\GLFW\docs\html\compile_8dox.html" />
+    <None Include="dep\GLFW\docs\html\compile_guide.html" />
+    <None Include="dep\GLFW\docs\html\context_8dox.html" />
+    <None Include="dep\GLFW\docs\html\context_guide.html" />
+    <None Include="dep\GLFW\docs\html\deprecated.html" />
+    <None Include="dep\GLFW\docs\html\dir_2c0a40d2e39b973aef6f9287031dec98.html" />
+    <None Include="dep\GLFW\docs\html\dir_6a897dd5418cfdfa24c447df90bbe1e1.html" />
+    <None Include="dep\GLFW\docs\html\dir_e1497d575aebd7a6d42b1c9051c2e199.html" />
+    <None Include="dep\GLFW\docs\html\dir_eafb4756861696bfe395888f5fb3058c.html" />
+    <None Include="dep\GLFW\docs\html\files.html" />
+    <None Include="dep\GLFW\docs\html\glfw3_8h.html" />
+    <None Include="dep\GLFW\docs\html\glfw3_8h_source.html" />
+    <None Include="dep\GLFW\docs\html\glfw3native_8h.html" />
+    <None Include="dep\GLFW\docs\html\glfw3native_8h_source.html" />
+    <None Include="dep\GLFW\docs\html\group__buttons.html" />
+    <None Include="dep\GLFW\docs\html\group__context.html" />
+    <None Include="dep\GLFW\docs\html\group__errors.html" />
+    <None Include="dep\GLFW\docs\html\group__gamepad__axes.html" />
+    <None Include="dep\GLFW\docs\html\group__gamepad__buttons.html" />
+    <None Include="dep\GLFW\docs\html\group__hat__state.html" />
+    <None Include="dep\GLFW\docs\html\group__init.html" />
+    <None Include="dep\GLFW\docs\html\group__input.html" />
+    <None Include="dep\GLFW\docs\html\group__joysticks.html" />
+    <None Include="dep\GLFW\docs\html\group__keys.html" />
+    <None Include="dep\GLFW\docs\html\group__mods.html" />
+    <None Include="dep\GLFW\docs\html\group__monitor.html" />
+    <None Include="dep\GLFW\docs\html\group__native.html" />
+    <None Include="dep\GLFW\docs\html\group__shapes.html" />
+    <None Include="dep\GLFW\docs\html\group__vulkan.html" />
+    <None Include="dep\GLFW\docs\html\group__window.html" />
+    <None Include="dep\GLFW\docs\html\index.html" />
+    <None Include="dep\GLFW\docs\html\input_8dox.html" />
+    <None Include="dep\GLFW\docs\html\input_guide.html" />
+    <None Include="dep\GLFW\docs\html\internal_8dox.html" />
+    <None Include="dep\GLFW\docs\html\internals_guide.html" />
+    <None Include="dep\GLFW\docs\html\intro_8dox.html" />
+    <None Include="dep\GLFW\docs\html\intro_guide.html" />
+    <None Include="dep\GLFW\docs\html\main_8dox.html" />
+    <None Include="dep\GLFW\docs\html\modules.html" />
+    <None Include="dep\GLFW\docs\html\monitor_8dox.html" />
+    <None Include="dep\GLFW\docs\html\monitor_guide.html" />
+    <None Include="dep\GLFW\docs\html\moving_8dox.html" />
+    <None Include="dep\GLFW\docs\html\moving_guide.html" />
+    <None Include="dep\GLFW\docs\html\news.html" />
+    <None Include="dep\GLFW\docs\html\news_8dox.html" />
+    <None Include="dep\GLFW\docs\html\pages.html" />
+    <None Include="dep\GLFW\docs\html\quick_8dox.html" />
+    <None Include="dep\GLFW\docs\html\quick_guide.html" />
+    <None Include="dep\GLFW\docs\html\structGLFWgamepadstate.html" />
+    <None Include="dep\GLFW\docs\html\structGLFWgammaramp.html" />
+    <None Include="dep\GLFW\docs\html\structGLFWimage.html" />
+    <None Include="dep\GLFW\docs\html\structGLFWvidmode.html" />
+    <None Include="dep\GLFW\docs\html\vulkan_8dox.html" />
+    <None Include="dep\GLFW\docs\html\vulkan_guide.html" />
+    <None Include="dep\GLFW\docs\html\window_8dox.html" />
+    <None Include="dep\GLFW\docs\html\window_guide.html" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\triangledraw.txt" />
@@ -1355,6 +1489,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dep\ImGUI-1.60\stb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dep\GLEW\include\GL\eglew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dep\GLEW\include\GL\glew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dep\GLEW\include\GL\glxew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dep\GLEW\include\GL\wglew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dep\GLFW\include\GLFW\glfw3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dep\GLFW\include\GLFW\glfw3native.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tests\Test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tests\ClearColorTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
