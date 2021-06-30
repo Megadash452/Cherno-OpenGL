@@ -16,3 +16,6 @@ After you pulling the repository, open the project (.sln) with Visual Studio. In
 
 #### *Linker > General* > **Additional Library Directories**
 > $(SolutionDir)dep\GLFW\lib-vc2019;dep\GLEW\lib\Release\Win32
+
+#### *Linker > Input* > **Additional Dependencies**
+> glfw3.lib;glew32s.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)
