@@ -9,7 +9,8 @@ After you pulling the repository, open the project (.sln) with Visual Studio. In
 #### *C/C++ > Preprocessor* > **Preprocessor Definitions**
 > *Click the* **Configuration** *dropper and select **DEBUG***
 >> WIN32;\_CONSOLE;GLEW\_STATIC;%(PreprocessorDefinitions);\_DEBUG <br>
-> *Click the* **Configuration** *dropper and select **RELEASE*** <br>
+
+> *Click the* **Configuration** *dropper and select **RELEASE***
 >> WIN32;\_CONSOLE;GLEW\_STATIC;%(PreprocessorDefinitions);NDEBUG
 
 #### *Linker > General* > **Additional Library Directories**
