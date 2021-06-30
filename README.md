@@ -1,7 +1,12 @@
 ## OpenGL
 
+> **IMPORTANT NOTE*
+> This project will not build on x64. THe project can only run and build on x86 (32-bit) configuration. When the project is pulled, Visual Studio might default the project to run on x64. Make sure it is set to x86.
+
 # Pull Instructions
-After you pulling the repository, open the project (.sln) with Visual Studio. In the Solution Explorer, right click on the project and select **Properties**. Under the following categories of **Configuration Properties**, paste the follwing information (make sure you are editing *ALL CONFIGURATIONS*:
+
+If you set the run and build configurations to x86 and you are still getting include errors, enter the following information in your **Project Properties**.
+/After you pulling the repository, open the project (.sln) with Visual Studio. In the Solution Explorer, right click on the project and select **Properties**. Under the following /categories of **Configuration Properties**, paste the following information (make sure you are editing *ALL CONFIGURATIONS*:
 
 #### *C/C++ > General* > **Additional Include Directories**
 > $(SolutionDir)dep;$(SolutionDir)dep\GLFW\include;$(SolutionDir)dep\GLEW\include;$(SolutionDir)src\HPP
