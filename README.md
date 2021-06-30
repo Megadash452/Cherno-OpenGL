@@ -12,7 +12,7 @@ After you pulling the repository, open the project (.sln) with Visual Studio. In
 
 > *Click the* **Configuration** *dropper and select **RELEASE***
 >> WIN32;\_CONSOLE;GLEW\_STATIC;%(PreprocessorDefinitions);NDEBUG <br>
-> *Click the* **Configuration** *dropper and select **ALL CONFIGURATIONS***
+- *Click the* **Configuration** *dropper and select **ALL CONFIGURATIONS***
 
 #### *Linker > General* > **Additional Library Directories**
 > $(SolutionDir)dep\GLFW\lib-vc2019;dep\GLEW\lib\Release\Win32
