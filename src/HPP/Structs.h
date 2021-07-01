@@ -21,7 +21,11 @@ template<typename number> struct Vect2
 };
 template<typename number> struct Vect3
 {
-    number x, y, z;
+    union
+    {
+        struct { number x, y, z; };
+        struct { number r, g, b; };
+    };
 
     Vect3(number _x, number _y, number _z)
         : x(_x), y(_y), z(_z)
@@ -44,7 +48,11 @@ template<typename number> struct Vect3
 };
 template<typename number> struct Vect4
 {
-    number x, y, z, w;
+    union
+    {
+        struct { number x, y, z, w; };
+        struct { number r, g, b, a; };
+    };
 
     Vect4(number _x, number _y, number _z, number _w)
         : x(_x), y(_y), z(_z), w(_w)
@@ -75,27 +83,12 @@ template<typename number> struct Vect4
 
 template<typename number> struct colorRGB : public Vect3<number>
 {
-    number& r = this->x;
-    number& g = this->y;
-    number& b = this->z;
-
     colorRGB(number _r, number _g, number _b)
         : Vect3<number>{ _r, _g, _b }
     {
         this->r = _r;
         this->g = _g;
         this->b = _b;
-    }
-
-    void operator =(const Vect2<number>& v) {
-        this->r = v.x;
-        this->g = v.y;
-    }
-
-    void operator =(const Vect3<number>& v) {
-        this->r = v.x;
-        this->g = v.y;
-        this->b = v.z;
     }
 
     void operator =(const colorRGB<number>& v) {
@@ -106,35 +99,12 @@ template<typename number> struct colorRGB : public Vect3<number>
 };
 template<typename number> struct colorRGBA : public Vect4<number>
 {
-    number& r = this->x;
-    number& g = this->y;
-    number& b = this->z;
-    number& a = this->w;
-
     colorRGBA(number _r, number _g, number _b, number _a)
         : Vect4<number>{ _r, _g, _b, _a }
     {}
     colorRGBA(const colorRGBA<number>& c)
         : Vect4<number>{ c.r, c.g, c.b, c.a }
     {}
-
-    void operator =(const Vect2<number>& v) {
-        this->r = v.x;
-        this->g = v.y;
-    }
-
-    void operator =(const Vect3<number>& v) {
-        this->r = v.x;
-        this->g = v.y;
-        this->b = v.z;
-    }
-
-    void operator =(const Vect4<number>& v) {
-        this->r = v.x;
-        this->g = v.y;
-        this->b = v.z;
-        this->a = v.w;
-    }
 
     void operator =(const colorRGBA<number>& v) {
         this->r = v.r;
