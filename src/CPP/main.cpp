@@ -7,15 +7,15 @@
 #include <ImGUI-1.60/imgui.h>
 #include <ImGUI-1.60/imgui_impl_glfw_gl3.h>
 
-#include "Renderer.h"
-#include "Shapes.h"
-
-#include "../src/Tests/ClearColorTest.h"
-
 #include <iostream>
 #include <fstream>
 #include <string>
 using std::string;
+
+#include "Renderer.h"
+#include "Shapes.h"
+
+#include "../src/Tests/Test.h"
 
 #define END { glfwTerminate(); return 0; }
 #define END_ERR { glfwTerminate(); return -1; }
@@ -130,8 +130,8 @@ int main(void)
     if (!window)
         END_ERR
 
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
+        // Make the window's context current
+        glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // set framerate with v-sync
 
     {
@@ -231,16 +231,63 @@ int main(void)
         glm::vec3 first_position{ 0.0f, 0.0f, 0.0f };
         glm::vec3 copy_position{ 100.0f, 0.0f, 0.0f };
 
+
         // TESTS
-        test::ClearColor test1{};
+        test::Test* current_test = nullptr;
+        test::TestMenu* test_menu = new test::TestMenu{ current_test };
+        current_test = test_menu;
+
+        test_menu->add_test<test::ClearColor>("Clear Color");
+        //test_menu->add_test<test::MVP>("MVP Test");
+
 
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window))
         {
-            //renderer.clear();
+            renderer.clear();
 
-            test1.onUpdate(0.0f);
-            test1.onRender();
+
+            /// --- IMGUI
+            ImGui_ImplGlfwGL3_NewFrame();
+            {
+                if (current_test)
+                {
+                    current_test->onUpdate(0.0f);
+                    current_test->onRender();
+                    ImGui::Begin("Tests"); {
+                        if (current_test != test_menu)
+                            if (ImGui::Button("<== Back"))
+                            {
+                                delete current_test;
+                                current_test = test_menu;
+                            }
+                        current_test->onImGuiRender();
+                        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+                    } ImGui::End();
+                }
+
+                //ImGui::Text("");
+
+                ImGui::Text("Color");
+                ImGui::ColorEdit4("RGBA Color", (float*)&first_color);
+                ImGui::SliderFloat("Opacity", &first_color.w, 0.0f, 1.0f);
+
+                ImGui::Text("Position");
+                ImGui::SliderFloat("X", &first_position.x, 0.0f, (float)(Resolution.x - width));
+                ImGui::SliderFloat("Y", &first_position.y, 0.0f, (float)(Resolution.y - height));
+                ImGui::SliderFloat("Z", &first_position.z, 0.0f, 1.0f);
+
+                ImGui::Text("Copy Position");
+                ImGui::SliderFloat("x", &copy_position.x, 0.0f, (float)(Resolution.x - width));
+                ImGui::SliderFloat("y", &copy_position.y, 0.0f, (float)(Resolution.y - height));
+                ImGui::SliderFloat("z", &copy_position.z, 0.0f, 1.0f);
+
+                
+            }
+            ImGui::Render();
+            ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+            /// ---
+
 
             /* -- - draw first shape(square)*/ {
                 float dc = 0.004f; // change in color
@@ -279,8 +326,6 @@ int main(void)
                 //}
             }
             // move the object
-
-            
 
             // TODO: Hints on how to draw multiple objects with independent properties
             /// draw texture on colored rectangle
@@ -321,50 +366,15 @@ int main(void)
                 renderer.draw(first_va, first_ib, texture_shader);
             } /// ---
 
-
-            //draw_legacy_triangle(-1, 1, 1, 1);
-            //t.draw();
-            // glDrawArrays(GL_TRIANGLES, 0, 6); // draw triangle with static buffer
-
-
-            //draw_legacy_square(0.0f, 0.0f, 1);
-
-
-
-            /// --- IMGUI
-            ImGui_ImplGlfwGL3_NewFrame();
-            {
-                ImGui::Text("Color");
-                ImGui::ColorEdit4("RGBA Color", (float*)&first_color);
-                ImGui::SliderFloat("Opacity", &first_color.w, 0.0f, 1.0f);
-
-                ImGui::Text("Position");
-                ImGui::SliderFloat("X", &first_position.x, 0.0f, (float)(Resolution.x - width));
-                ImGui::SliderFloat("Y", &first_position.y, 0.0f, (float)(Resolution.y - height));
-                ImGui::SliderFloat("Z", &first_position.z, 0.0f, 1.0f);
-
-                ImGui::Text("Copy Position");
-                ImGui::SliderFloat("x", &copy_position.x, 0.0f, (float)(Resolution.x - width));
-                ImGui::SliderFloat("y", &copy_position.y, 0.0f, (float)(Resolution.y - height));
-                ImGui::SliderFloat("z", &copy_position.z, 0.0f, 1.0f);
-
-                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-                test1.onImGuiRender();
-            }
-            ImGui::Render();
-            ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-            /// ---
-
-
-
             // Swap front and back buffers
             glfwSwapBuffers(window);
             // Poll for and process events
             glfwPollEvents();
         }
         // delete heap allocated buffers and shaders
-
+        delete current_test;
+        if (current_test != test_menu)
+            delete test_menu;
     }
 
     ImGui_ImplGlfwGL3_Shutdown();

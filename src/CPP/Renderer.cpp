@@ -18,8 +18,9 @@ bool GLLogCall(const char* file, const char* func, int line)
     return true;
 }
 
-void Renderer2D::clear() const
+void Renderer2D::clear(Vect4<float> color) const
 {
+    GLCALL(glClearColor(color.r, color.g, color.b, color.a));
     glClear(GL_COLOR_BUFFER_BIT);
 }
 

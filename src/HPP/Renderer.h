@@ -25,7 +25,7 @@ bool GLLogCall(const char* file, const char* func, int line);
 
 struct Renderer2D
 {
-	void clear() const;
+	void clear(Vect4<float> color = { 0.0f, 0.0f, 0.0f, 0.0f }) const;
 	void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
 //	void draw(Texture t) const;
 //
